@@ -1,1 +1,2 @@
-# amsc661_hw_code
+# AMSC661 Homework Code
+Code for the AMSC661 homework assignments.
