@@ -5,7 +5,7 @@ from time import process_time_ns
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_arenstorf(T):
+def plot_arenstorf(T, method=None):
     mu = 0.012277471
     tspan = np.array([0, T])
     initial = [0.994, 0.0, 0.0, -2.00158510637908252240537862224]
@@ -18,28 +18,32 @@ def plot_arenstorf(T):
                 y[0] + 2 * y[3] - (1 - mu) * (y[0] + mu)/d1 - mu * (y[0] - 1 + mu) / d2,
                 y[1] - 2 * y[2] - (1 - mu) * y[1] / d1 - mu * y[1] / d2]
 
-    t_start = process_time_ns()
-    sol = solve_ivp(f, tspan, initial, 'RK45', rtol=1e-12, atol=1e-12)
-    t_end = process_time_ns()
-    print(f'RK45 CPU Time for T={T}: {t_end - t_start}')
-    plt.plot(sol.y[0], sol.y[1], 'r')
+    if (method == None or method == 'RK45'):
+        t_start = process_time_ns()
+        sol = solve_ivp(f, tspan, initial, 'RK45', rtol=1e-12, atol=1e-12)
+        t_end = process_time_ns()
+        print(f'RK45 CPU Time for T={T}: {t_end - t_start} ns')
+        plt.plot(sol.y[0], sol.y[1], 'r')
 
-    t_start = process_time_ns()
-    sol = solve_ivp(f, tspan, initial, 'DOP853', rtol=1e-12, atol=1e-12)
-    t_end = process_time_ns()
-    print(f'RK45 CPU Time for T={T}: {t_end - t_start}')
-    plt.plot(sol.y[0], sol.y[1], 'g')
+    if (method == None or method == 'DOP853'):
+        t_start = process_time_ns()
+        sol = solve_ivp(f, tspan, initial, 'DOP853', rtol=1e-12, atol=1e-12)
+        t_end = process_time_ns()
+        print(f'DOP853 CPU Time for T={T}: {t_end - t_start} ns')
+        plt.plot(sol.y[0], sol.y[1], 'g')
 
-    t_start = process_time_ns()
-    sol = solve_ivp(f, tspan, initial, 'Radau', rtol=1e-12, atol=1e-12)
-    t_end = process_time_ns()
-    print(f'RK45 CPU Time for T={T}: {t_end - t_start}')
-    plt.plot(sol.y[0], sol.y[1], 'b')
+    if (method == None or method == 'Radau'):
+        t_start = process_time_ns()
+        sol = solve_ivp(f, tspan, initial, 'Radau', rtol=1e-12, atol=1e-12)
+        t_end = process_time_ns()
+        print(f'Radau CPU Time for T={T}: {t_end - t_start} ns')
+        plt.plot(sol.y[0], sol.y[1], 'b')
 
-    plt.title(f'Arenstorf Orbit, T={T}')
+    plt.title(f'Arenstorf Orbit, T={T}' + (f', {method}' if method != None else ''))
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.legend(['RK45', 'DOP853', 'Radau'])
+    if (method == None):
+        plt.legend(['RK45', 'DOP853', 'Radau'])
     plt.show()
 
 # plot_arenstorf(17.0652165601579625588917206249)
