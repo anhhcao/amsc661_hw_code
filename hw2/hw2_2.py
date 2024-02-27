@@ -44,7 +44,7 @@ dopri5 = 1 + z * (
 plt.rcParams.update({'font.size': 22})
 fig, ax = plt.subplots(figsize=(8,8))
 
-plt.contour(xg,yg,abs(euler),np.arange(2), colors='red')  
+plt.contour(xg,yg,abs(euler),np.arange(2), colors='red')
 plt.contour(xg,yg,abs(midpoint),np.arange(2), colors='blue')  
 plt.contour(xg,yg,abs(rk3),np.arange(2), colors='green')
 plt.contour(xg,yg,abs(rk4),np.arange(2), colors='yellow')
